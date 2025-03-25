@@ -91,12 +91,9 @@ const CarDetailsPage = () => {
 
       // Show success message
       toast.success("Appointment requested successfully!");
-      setShowAppointmentForm(false);
-      setAppointmentDetails({
-        date: "",
-        time: "",
-        notes: "",
-      });
+      
+      // Redirect to appointments page
+      navigate("/appointments");
     } catch (error) {
       toast.error("Failed to book appointment. Please try again.");
       console.error("Error booking appointment:", error);
