@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Car, Appointment } from "@/lib/types";
@@ -87,13 +88,26 @@ const CarDetailsPage = () => {
         notes: appointmentDetails.notes,
       };
 
+      // Add appointment to the database
       addAppointment(appointment);
 
       // Show success message
       toast.success("Appointment requested successfully!");
       
+      // Clear form fields
+      setAppointmentDetails({
+        date: "",
+        time: "",
+        notes: "",
+      });
+      
+      // Hide the appointment form
+      setShowAppointmentForm(false);
+      
       // Redirect to appointments page
-      navigate("/appointments");
+      setTimeout(() => {
+        navigate("/appointments");
+      }, 1000); // Small delay to ensure the user sees the success message
     } catch (error) {
       toast.error("Failed to book appointment. Please try again.");
       console.error("Error booking appointment:", error);
@@ -296,22 +310,22 @@ const CarDetailsPage = () => {
                   <User className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-medium">{car.sellerName}</p>
+                  <p className="font-medium">{car?.sellerName}</p>
                   <p className="text-sm text-muted-foreground">Seller</p>
                 </div>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex items-center text-sm">
                   <Phone size={16} className="mr-2 text-muted-foreground" />
-                  <span>{car.sellerPhone || "Contact through platform"}</span>
+                  <span>{car?.sellerPhone || "Contact through platform"}</span>
                 </div>
                 <div className="flex items-center text-sm">
                   <MapPin size={16} className="mr-2 text-muted-foreground" />
-                  <span>{car.location}</span>
+                  <span>{car?.location}</span>
                 </div>
                 <div className="flex items-center text-sm">
                   <Calendar size={16} className="mr-2 text-muted-foreground" />
-                  <span>Listed on {new Date(car.listed).toLocaleDateString()}</span>
+                  <span>Listed on {car ? new Date(car.listed).toLocaleDateString() : ""}</span>
                 </div>
               </div>
               <Button 
@@ -324,7 +338,9 @@ const CarDetailsPage = () => {
                 variant="outline" 
                 className="w-full"
                 onClick={() => {
-                  window.open(`mailto:contact@wheelswap.com?subject=Inquiry about ${car.brand} ${car.model}&body=Hello, I am interested in the ${car.year} ${car.brand} ${car.model} listed on WheelSwap (ID: ${car.id}). Please provide more information.`);
+                  if (car) {
+                    window.open(`mailto:contact@wheelswap.com?subject=Inquiry about ${car.brand} ${car.model}&body=Hello, I am interested in the ${car.year} ${car.brand} ${car.model} listed on WheelSwap (ID: ${car.id}). Please provide more information.`);
+                  }
                 }}
               >
                 Contact Seller
