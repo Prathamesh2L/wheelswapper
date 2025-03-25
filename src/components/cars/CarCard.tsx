@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Car } from "@/lib/types";
 import { formatCurrency } from "@/lib/data-service";
 import { motion } from "framer-motion";
-import { Calendar, Info, MapPin } from "lucide-react";
+import { Calendar, IndianRupee, Info, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -61,7 +61,10 @@ export default function CarCard({ car, priority = false }: CarCardProps) {
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-medium truncate">{car.brand} {car.model}</h3>
-          <span className="text-primary font-semibold">{formatCurrency(car.price)}</span>
+          <span className="text-primary font-semibold flex items-center">
+            <IndianRupee size={16} className="mr-1" />
+            {formatCurrency(car.price).replace('₹', '')}
+          </span>
         </div>
         
         <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{car.title}</p>
